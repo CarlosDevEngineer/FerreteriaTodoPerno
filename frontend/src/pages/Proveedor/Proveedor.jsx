@@ -96,18 +96,54 @@ const ProveedorManagerMobile = () => {
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
+
+    let newValue = value;
+
+    if (name === 'nombre' || name === 'contacto') {
+      // Solo letras y espacios
+      newValue = value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ\s]/g, '');
+    } else if (name === 'nit') {
+      // Solo números, máximo 12 dígitos
+      newValue = value.replace(/\D/g, '').slice(0, 12);
+    } else if (name === 'telefono') {
+      // Solo números, máximo 8 dígitos
+      newValue = value.replace(/\D/g, '').slice(0, 8);
+    }
+
     setFormData({
       ...formData,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : newValue
     });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     try {
+        const nombreRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/; 
+        const nitRegex = /^\d{1,12}$/; 
+        const contactoRegex = /^[0-9\s]+$/; 
+        const telefonoRegex = /^\d{1,8}$/;
+      
       if (!formData.nombre || !formData.nit) {
         throw new Error('Nombre y NIT son requeridos');
+      }
+
+      if (!formData.nombre || !nombreRegex.test(formData.nombre)) {
+        throw new Error('Nombre inválido. Solo se permiten letras y espacios.');
+      }
+
+      if (!formData.nit || !nitRegex.test(formData.nit)) {
+        throw new Error('NIT inválido. Debe tener máximo 12 dígitos numéricos.');
+      }
+
+      if (formData.contacto && !contactoRegex.test(formData.contacto)) {
+        throw new Error('Contacto inválido. Solo se permiten números.');
+      }
+
+      if (formData.telefono && !telefonoRegex.test(formData.telefono)) {
+        throw new Error('Teléfono inválido. Debe tener máximo 8 dígitos y solo números.');
       }
 
       const url = currentProveedor 

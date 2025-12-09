@@ -21,6 +21,12 @@ const ClienteManagerMobile = () => {
     nombre: '',
     telefono: ''
   });
+  const [errors, setErrors] = useState({
+    nit_ci: '',
+    nombre: '',
+    telefono: ''
+  });
+
 
   useEffect(() => {
     const fetchClientes = async () => {
@@ -91,14 +97,54 @@ const ClienteManagerMobile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value
-    });
-  };
+
+      if (name === 'nombre') {
+        if (/^[A-Za-z\s]*$/.test(value)) {
+          setFormData({ ...formData, [name]: value });
+
+          setErrors(prev => ({
+            ...prev,
+            nombre: value.trim() === '' ? 'Nombre es obligatorio' : ''
+          }));
+        }
+      }
+
+      if (name === 'nit_ci') {
+        if (/^\d{0,9}$/.test(value)) {
+          setFormData({ ...formData, [name]: value });
+
+          setErrors(prev => ({
+            ...prev,
+            nit_ci: value.trim() === '' ? 'NIT/CI es obligatorio' : ''
+          }));
+        }
+      }
+
+      if (name === 'telefono') {
+        if (/^\d{0,8}$/.test(value)) {
+          setFormData({ ...formData, [name]: value });
+
+          // Validación en tiempo real para que sea obligatorio
+          setErrors(prev => ({
+            ...prev,
+            telefono: value.trim() === '' ? 'Teléfono es obligatorio' : ''
+          }));
+        }
+      }
+    };
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+      if (!formData.nit_ci || !formData.nombre || !formData.telefono) {
+      let mensaje = 'Por favor complete los campos obligatorios:\n';
+      if (!formData.nit_ci) mensaje += '- NIT/CI\n';
+      if (!formData.nombre) mensaje += '- Nombre\n';
+      if (!formData.telefono) mensaje += '- Teléfono\n';
+      alert(mensaje);
+      return;
+    }
     
     try {
       if (!formData.nit_ci || !formData.nombre) {

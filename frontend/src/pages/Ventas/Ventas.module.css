@@ -2,7 +2,7 @@
   padding: 1rem;
   max-width: 1400px;
   margin: 0 auto;
-  height: 100vh;
+  height: 950px;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -841,6 +841,10 @@
   .itemDetails {
     grid-template-columns: 1fr;
     gap: 0.25rem;
+  }
+  .header {
+    margin-left: 80px;
+    margin-top: 10px;
   }
 }
 

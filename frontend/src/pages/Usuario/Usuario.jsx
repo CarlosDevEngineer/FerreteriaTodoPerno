@@ -105,6 +105,15 @@ const UsuariosManagerMobile = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    if (name === "nombre") {
+      if (!/^[A-Za-z\s]*$/.test(value)) return; 
+    }
+
+    if (name === "username") {
+      if (/^\d+$/.test(value)) return;
+    }
+
     setFormData({
       ...formData,
       [name]: value
@@ -113,7 +122,6 @@ const UsuariosManagerMobile = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
     try {
       if (!formData.nombre || !formData.username || !formData.rol) {
         throw new Error('Nombre, username y rol son requeridos');

@@ -273,8 +273,14 @@ const getComboInfo = (comboId) => {
 
   const handleItemChange = (e) => {
     const { name, value } = e.target;
+
+    if ((name === 'cantidad' || name === 'precio_unitario') && value !== '') {
+      const regex = /^\d*\.?\d*$/; 
+      if (!regex.test(value)) return; 
+    }
+
     setNewItem(prev => ({ ...prev, [name]: value }));
-  };
+  }
 
   const addItem = () => {
     // Validación modificada: aceptar producto_id O producto_padre_id (combo)
@@ -787,7 +793,7 @@ const getComboInfo = (comboId) => {
                     <div className={styles.formGroup}>
                       <label>Cantidad *</label>
                       <input
-                        type="number"
+                        type="text"
                         name="cantidad"
                         min="1"
                         step="1"
@@ -800,7 +806,7 @@ const getComboInfo = (comboId) => {
                     <div className={styles.formGroup}>
                       <label>Precio Unitario *</label>
                       <input
-                        type="number"
+                        type="text"
                         name="precio_unitario"
                         min="0.01"
                         step="0.01"
@@ -808,7 +814,7 @@ const getComboInfo = (comboId) => {
                         onChange={handleItemChange}
                         className={styles.formInput}
                         placeholder="0.00"
-                        readOnly={!!newItem.producto_padre_id} // ← Hacer readonly cuando hay combo
+                        readOnly={!!newItem.producto_padre_id}
                         style={newItem.producto_padre_id ? { backgroundColor: '#f0f0f0' } : {}}
                       />
                       {newItem.producto_padre_id && (

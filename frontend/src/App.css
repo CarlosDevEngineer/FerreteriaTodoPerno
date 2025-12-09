@@ -34,7 +34,6 @@
   border-radius: 2rem;
   gap: 16px;
   grid-template-columns: 11rem auto 20rem;
-  overflow: hidden;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: var(--boxShadow);
@@ -81,11 +80,7 @@
     grid-column: 1;
   }
 }
-/* ==================================
-   AJUSTES PARA SIDEBAR RESPONSIVE
-   ================================== */
 
-/* Asegurar que el layout principal funcione con sidebar */
 .AppGlass {
   display: grid;
   height: 97%;
@@ -94,7 +89,6 @@
   border-radius: 2rem;
   gap: 16px;
   grid-template-columns: 11rem auto 20rem;
-  overflow: hidden;
   position: relative;
 }
 
@@ -128,8 +122,4 @@
     gap: 0;
   }
   
-  /* Cuando el sidebar está abierto, evitar scroll en el contenido principal */
-  body.sidebar-open {
-    overflow: hidden;
-  }
 }

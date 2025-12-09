@@ -201,8 +201,14 @@ const generarNumeroFactura = () => {
 
   const handleItemChange = (e) => {
     const { name, value } = e.target;
+
+    if ((name === 'cantidad' || name === 'precio_unitario') && value !== '') {
+      const regex = /^\d*\.?\d*$/; 
+      if (!regex.test(value)) return; 
+    }
+
     setNewItem(prev => ({ ...prev, [name]: value }));
-  };
+  }
 
   const addItem = () => {
     // Validación reforzada
@@ -674,7 +680,7 @@ const generarNumeroFactura = () => {
                     <div className={styles.formGroup}>
                       <label>Cantidad *</label>
                       <input
-                        type="number"
+                        type="text"
                         name="cantidad"
                         min="0.01"
                         step="0.01"
@@ -687,7 +693,7 @@ const generarNumeroFactura = () => {
                     <div className={styles.formGroup}>
                       <label>Precio Unitario *</label>
                       <input
-                        type="number"
+                        type="text"
                         name="precio_unitario"
                         min="0.01"
                         step="0.01"

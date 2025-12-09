@@ -97,7 +97,8 @@
   align-items: center;
   justify-content: space-around;
   padding: 1rem;
-}
+  margin-left: 120px;
+} solo agregue margin left y ya por que yanyo pedo pones
 
 .ExpandedCard > span:nth-of-type(1) {
   color: white;
@@ -117,7 +118,7 @@
 
 @media screen and (max-width: 1200px) {
   .CompactCard {
-    height: 7rem !important; /* Ajustar para tablets */
+    height: 7rem !important; 
     padding: 5px;
   }
   
@@ -133,6 +134,7 @@
     top: 2rem;
     height: 45vh;
     left: 6rem;
+    margin-left: 35px;
   }
 }
 
@@ -164,8 +166,8 @@
   
   .ExpandedCard {
     top: 8rem;
-    height: 50%;
+    height: 40%;
     left: 25px;
-    width: 80%;
+    width: 60%;
   }
 }

@@ -2,10 +2,10 @@
   padding: 1rem;
   max-width: 1200px;
   margin: 0 auto;
-  height: 100vh; /* Cambiado a altura completa de la ventana */
+  height: 950px;
   display: flex;
   flex-direction: column;
-  overflow: hidden; /* Evita el doble scroll */
+  overflow: hidden;
 }
 
 .header {
@@ -479,6 +479,10 @@
   
   .proveedoresList {
     overflow-y: visible; /* Sin scroll en móviles */
+  }
+  .header {
+    margin-left: 80px;
+    margin-top: 15px;
   }
 }
 
