@@ -459,7 +459,7 @@ const formatTime = (dateString) => {
         </div>
       ) : (
         <div className="table-scroll-container">
-          <TableContainer component={Paper} sx={{ boxShadow: 'none' }}>
+          <TableContainer component={Paper} sx={{ boxShadow: 'none', height: '250px' }}>
             <Table className="responsive-table" aria-label="tabla de ventas" stickyHeader>
               <TableHead>
                 <TableRow>

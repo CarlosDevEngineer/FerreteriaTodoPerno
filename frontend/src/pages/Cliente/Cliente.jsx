@@ -98,59 +98,54 @@ const ClienteManagerMobile = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-      if (name === 'nombre') {
-        if (/^[A-Za-z\s]*$/.test(value)) {
-          setFormData({ ...formData, [name]: value });
+    // Actualizar valor
+    setFormData(prev => ({ ...prev, [name]: value }));
 
-          setErrors(prev => ({
-            ...prev,
-            nombre: value.trim() === '' ? 'Nombre es obligatorio' : ''
-          }));
-        }
-      }
+    if (name === 'nombre') {
+      setErrors(prev => ({
+        ...prev,
+        nombre: value !== '' && !/^[A-Za-z\s]+$/.test(value) ? 'El nombre no puede contener números' : ''
+      }));
+    }
 
-      if (name === 'nit_ci') {
-        if (/^\d{0,9}$/.test(value)) {
-          setFormData({ ...formData, [name]: value });
+    if (name === 'nit_ci') {
+      setErrors(prev => ({
+        ...prev,
+        nit_ci: value !== '' && !/^\d+$/.test(value) ? 'El NIT/CI solo puede contener números' : ''
+      }));
+    }
 
-          setErrors(prev => ({
-            ...prev,
-            nit_ci: value.trim() === '' ? 'NIT/CI es obligatorio' : ''
-          }));
-        }
-      }
-
-      if (name === 'telefono') {
-        if (/^\d{0,8}$/.test(value)) {
-          setFormData({ ...formData, [name]: value });
-
-          // Validación en tiempo real para que sea obligatorio
-          setErrors(prev => ({
-            ...prev,
-            telefono: value.trim() === '' ? 'Teléfono es obligatorio' : ''
-          }));
-        }
-      }
-    };
-
+    if (name === 'telefono') {
+      setErrors(prev => ({
+        ...prev,
+        telefono: value !== '' && !/^\d+$/.test(value) ? 'El teléfono solo puede contener números' : ''
+      }));
+    }
+  };
 
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-      if (!formData.nit_ci || !formData.nombre || !formData.telefono) {
-      let mensaje = 'Por favor complete los campos obligatorios:\n';
-      if (!formData.nit_ci) mensaje += '- NIT/CI\n';
-      if (!formData.nombre) mensaje += '- Nombre\n';
-      if (!formData.telefono) mensaje += '- Teléfono\n';
-      alert(mensaje);
-      return;
-    }
-    
-    try {
-      if (!formData.nit_ci || !formData.nombre) {
-        throw new Error('NIT/CI y Nombre son requeridos');
-      }
+  e.preventDefault();
 
+    let tempErrors = {};
+
+    if (!formData.nit_ci) tempErrors.nit_ci = 'NIT/CI es obligatorio';
+    else if (!/^\d+$/.test(formData.nit_ci)) tempErrors.nit_ci = 'El NIT/CI solo puede contener números';
+
+    if (!formData.nombre) tempErrors.nombre = 'Nombre es obligatorio';
+    else if (!/^[A-Za-z\s]+$/.test(formData.nombre)) tempErrors.nombre = 'El nombre no puede contener números';
+
+    if (!formData.telefono) tempErrors.telefono = 'Teléfono es obligatorio';
+    else if (!/^\d+$/.test(formData.telefono)) tempErrors.telefono = 'El teléfono solo puede contener números';
+
+    if (Object.keys(tempErrors).length > 0) {
+      setErrors(tempErrors);
+      return; 
+    }
+
+    setErrors({});
+
+    try {
       const url = currentCliente 
         ? `${process.env.REACT_APP_API_URL}/clientes/${currentCliente.cliente_id}`
         : `${process.env.REACT_APP_API_URL}/clientes`;
@@ -165,7 +160,7 @@ const ClienteManagerMobile = () => {
         },
         body: JSON.stringify({
           ...formData,
-          ...(currentCliente && {cliente_id: currentCliente.cliente_id})
+          ...(currentCliente && { cliente_id: currentCliente.cliente_id })
         })
       });
 
@@ -196,7 +191,7 @@ const ClienteManagerMobile = () => {
       alert(`Error: ${err.message}`);
     }
   };
-
+  
   const handleDelete = async (id) => {
     if (window.confirm('¿Eliminar este cliente?')) {
       try {
@@ -395,6 +390,7 @@ const ClienteManagerMobile = () => {
                     className={styles.formInput}
                     placeholder="Número de identificación"
                   />
+                  {errors.nit_ci && <small style={{ color: 'red' }}>{errors.nit_ci}</small>}
                 </div>
                 
                 <div className={styles.formGroup}>
@@ -408,6 +404,7 @@ const ClienteManagerMobile = () => {
                     className={styles.formInput}
                     placeholder="Nombre completo del cliente"
                   />
+                  {errors.nombre && <small style={{ color: 'red' }}>{errors.nombre}</small>}
                 </div>
                 
                 <div className={styles.formGroup}>
@@ -420,6 +417,7 @@ const ClienteManagerMobile = () => {
                     className={styles.formInput}
                     placeholder="Número de teléfono"
                   />
+                  {errors.telefono && <small style={{ color: 'red' }}>{errors.telefono}</small>}
                 </div>
               </div>
 

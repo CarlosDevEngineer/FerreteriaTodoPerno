@@ -13,7 +13,17 @@ th {
 
 .Table:first-child {
   border-radius: 0.7rem !important;
+  height: 10px;
 }
+
+.Table .MuiTableBody-root .MuiTableRow-root > * {
+  padding: 12px 18px;
+}
+
+.Table .MuiTableBody-root .MuiTableCell-root {
+    height: -100px;
+}
+
 
 .status {
   padding: 8px;

@@ -10,10 +10,13 @@ import {
   UilUser,
   UilUserCircle,
   UilShield,
-  UilKeySkeleton
+  UilKeySkeleton,
+  UilEye,
+  UilEyeSlash
 } from '@iconscout/react-unicons';
 import styles from './Usuario.module.css';
 import {useAuth} from '../../auth/AuthContext';
+
 
 const UsuariosManagerMobile = () => {
   const [usuarios, setUsuarios] = useState([]);
@@ -22,11 +25,17 @@ const UsuariosManagerMobile = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [showForm, setShowForm] = useState(false);
   const [currentUsuario, setCurrentUsuario] = useState(null);
+  const [showPassword, setShowPassword] = useState(false);
   const {user} = useAuth();
 
   // Estados para la paginación
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
+
+  const [formErrors, setFormErrors] = useState({
+    nombre: "",
+    username: "",
+  });
 
   const [formData, setFormData] = useState({
     nombre: '',
@@ -102,12 +111,31 @@ const UsuariosManagerMobile = () => {
     
     return pageNumbers;
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
+    let errors = { ...formErrors };
+
     if (name === "nombre") {
-      if (!/^[A-Za-z\s]*$/.test(value)) return; 
+      if (!/^[A-Za-z\s]*$/.test(value)) {
+        errors.nombre = "El nombre solo puede contener letras";
+      } else {
+        errors.nombre = "";
+      }
+    }
+
+    if (name === "username") {
+      if (/^\d+$/.test(value)) {
+        errors.username = "El username no puede ser solo números";
+      } else {
+        errors.username = "";
+      }
+    }
+
+    setFormErrors(errors);
+
+    if (name === "nombre") {
+      if (!/^[A-Za-z\s]*$/.test(value)) return;
     }
 
     if (name === "username") {
@@ -119,6 +147,7 @@ const UsuariosManagerMobile = () => {
       [name]: value
     });
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -393,6 +422,10 @@ const UsuariosManagerMobile = () => {
                     className={styles.formInput}
                     placeholder="Nombre completo"
                   />
+                  {formErrors.nombre && (
+                    <span style={{ color: "red", fontSize: "12px" }}>{formErrors.nombre}</span>
+                  )}
+
                 </div>
 
                 <div className={styles.formGroup}>
@@ -406,6 +439,10 @@ const UsuariosManagerMobile = () => {
                     className={styles.formInput}
                     placeholder="Nombre de usuario"
                   />
+                  {formErrors.username && (
+                    <span style={{ color: "red", fontSize: "12px" }}>{formErrors.username}</span>
+                  )}
+
                 </div>
 
                 <div className={styles.formGroup}>
@@ -427,8 +464,9 @@ const UsuariosManagerMobile = () => {
                     <label>Contraseña *</label>
                     <div className={styles.passwordInputContainer}>
                       <UilKeySkeleton size="18" color="#718096" className={styles.passwordIcon} />
+
                       <input 
-                        type="password" 
+                        type={showPassword ? "text" : "password"}
                         name="password"
                         value={formData.password}
                         onChange={handleInputChange}
@@ -436,6 +474,17 @@ const UsuariosManagerMobile = () => {
                         className={styles.formInput}
                         placeholder="******"
                       />
+
+                      <div 
+                        className={styles.eyeIcon}
+                        onClick={() => setShowPassword(!showPassword)}
+                      >
+                        {showPassword ? (
+                          <UilEyeSlash size="20" color="#718096" />
+                        ) : (
+                          <UilEye size="20" color="#718096" />
+                        )}
+                      </div>
                     </div>
                   </div>
                 ) : (
